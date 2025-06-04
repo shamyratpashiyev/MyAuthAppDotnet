@@ -1,0 +1,147 @@
+@model List<UserWithRolesDto>;
+
+<div class="users-list-container">
+    <h1>Users List</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>User Name</th>
+            <th>Role</th> <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td class="user-name">
+                    @user.UserName @user.NormalizedEmail
+                </td>
+                <td>
+                    @if (user.Roles.Any())
+                    {
+                        <select class="role-select">
+                            @foreach (var role in user.Roles)
+                            {
+                                <option value="user">@role</option>
+                            }
+                        </select>
+                    }
+                </td>
+                <td>
+                    <button class="edit-button">
+                        @Html.ActionLink("Edit", "EditUserGet", "Account", routeValues: new { Id = user.Id })
+                    </button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .users-list-container {
+    background-color: #ffffff; /* bg-white */
+    padding: 1.5rem; /* p-6 */
+    border-radius: 0.5rem; /* rounded-lg */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+    width: 100%;
+    max-width: 60rem; /* Increased max-width to accommodate new column */
+}
+
+h1 {
+    font-size: 1.875rem; /* text-3xl */
+    font-weight: 700; /* font-bold */
+    color: #1f2937; /* text-gray-800 */
+    margin-bottom: 1.5rem; /* mb-6 */
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate; /* Allows border-radius on cells */
+    border-spacing: 0; /* Removes space between cells */
+    overflow: hidden; /* Ensures rounded corners are visible */
+    border-radius: 0.5rem; /* rounded-lg for the whole table */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+}
+
+th, td {
+    padding: 1rem; /* p-4 */
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb; /* border-gray-200 */
+}
+
+th {
+    background-color: #f9fafb; /* bg-gray-50 */
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 600; /* font-semibold */
+    color: #4b5563; /* text-gray-700 */
+    text-transform: uppercase;
+    letter-spacing: 0.05em; /* tracking-wider */
+}
+
+tr:last-child td {
+    border-bottom: none; /* No border for the last row */
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9fafb; /* bg-gray-50 for even rows */
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #ffffff; /* bg-white for odd rows */
+}
+
+.user-name {
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 500; /* font-medium */
+    color: #374151; /* text-gray-700 */
+}
+
+.edit-button {
+    background-color: #3b82f6; /* bg-blue-500 */
+    color: #ffffff; /* text-white */
+    font-weight: 600; /* font-semibold */
+    padding: 0.5rem 1rem; /* py-2 px-4 */
+    border-radius: 0.5rem; /* rounded-lg */
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* transition duration-300 ease-in-out */
+}
+
+.edit-button:hover {
+    background-color: #2563eb; /* hover:bg-blue-600 */
+    transform: scale(1.05); /* hover:scale-105 */
+}
+
+.edit-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 */
+}
+
+.role-select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background-color: #ffffff;
+    font-size: 0.875rem;
+    color: #1f2937;
+    box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    appearance: none; /* Remove default browser dropdown arrow */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%234B5563" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.25rem;
+    cursor: pointer;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.role-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}      
+</style>

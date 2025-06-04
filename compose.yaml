@@ -1,0 +1,7 @@
+﻿services:
+  myauthapp:
+    image: myauthapp
+    build:
+      context: .
+      dockerfile: MyAuthApp/Dockerfile
+
