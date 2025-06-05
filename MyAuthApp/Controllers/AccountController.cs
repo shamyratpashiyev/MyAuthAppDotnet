@@ -71,12 +71,12 @@ public class AccountController : Controller
         if (ModelState.IsValid)
         {
             var userSignedIn = await _signInManager
-                .PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                .PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
             if (userSignedIn.Succeeded)
             {
                 return RedirectToAction("Index", "Home");
             }
-            
+
             ModelState.AddModelError("", "Invalid login attempt.");
         }
         return View(model);

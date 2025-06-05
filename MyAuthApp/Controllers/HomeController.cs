@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyAuthApp.Data;
@@ -39,6 +40,18 @@ public class HomeController : Controller
         return View();
     }
 
+    [Authorize(Roles = "admin")]
+    public IActionResult AdminPage()
+    {
+        return View();
+    }
+
+    [Authorize(Roles = "user")]
+    public IActionResult UserPage()
+    {
+        return View();
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
@@ -66,7 +79,7 @@ public class HomeController : Controller
                 Email = "test@email.com"
             };
             await _userManager.CreateAsync(testUser, "PASSword123$%");
-            await _userManager.AddToRoleAsync(testUser, "admin");
+            // await _userManager.AddToRoleAsync(testUser, "admin");
             await _userManager.AddToRoleAsync(testUser, "user");
         }
     }
