@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyAuthApp.Data;
 using MyAuthApp.Models;
+using MyAuthApp.Services;
 
 namespace MyAuthApp.Controllers;
 
@@ -32,6 +33,10 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         await SeedUsersAndRoles();
+        var jwtService = new JwtService();
+        var token = jwtService.Create();
+        jwtService.Decode(token);
+
         return View();
     }
 
