@@ -49,14 +49,14 @@ public class JwtService : IJwtService
 
         foreach (var role in roles)
         {
-            claims.Append(new Claim("role", role));
+            claims = claims.Append(new Claim("role", role)).ToArray();
         }
 
         var token = new JwtSecurityToken(
             issuer: Issuer,
             audience: Audience,
             claims: claims,
-            expires: DateTime.Now.AddMinutes(1),
+            expires: DateTime.Now.AddMinutes(5),
             signingCredentials: SigningCredential
         );
         
@@ -74,6 +74,7 @@ public class JwtService : IJwtService
             ValidIssuer = Issuer,
             ValidAudience = Audience,
             IssuerSigningKey = SecurityKey,
+            ClockSkew = TimeSpan.Zero       // It is to prevent timeZone problems with exp
         };
         try
         {

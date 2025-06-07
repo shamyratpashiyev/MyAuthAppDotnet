@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -42,7 +43,7 @@ public class HomeController : ControllerBase
         return Ok(users);
     }
 
-    [HttpGet]
+    [HttpPost]
     public IActionResult GenerateJwtToken(string userName, List<string> roles)
     {
         var token = _jwtService.Create(userName, roles);
@@ -54,7 +55,27 @@ public class HomeController : ControllerBase
     {
         return _jwtService.Decode(token);
     }
+
+    [HttpGet]
+    [Authorize(Roles = "admin")]
+    public IActionResult AdminPage()
+    {
+        return Ok(new { message = "Welcome to admin page" });
+    }
     
+    [HttpGet]
+    [Authorize(Roles = "user")]
+    public IActionResult UserPage()
+    {
+        return Ok(new { message = "Welcome to user page" });
+    }
+    
+    [HttpGet]
+    [Authorize]
+    public IActionResult ProtectedPage()
+    {
+        return Ok(new { message = "Welcome to Protected page" });
+    }
     private async Task SeedUsersAndRoles()
     {
         if (await _userManager.FindByNameAsync("testUser") == null)
