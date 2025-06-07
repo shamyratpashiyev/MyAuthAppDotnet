@@ -10,7 +10,7 @@ public interface IJwtService
     /// <summary>
     /// Generates JwtToken based on credentials provided.
     /// </summary>
-    string Create(string userName, string role);
+    string Create(string userName, List<string> roles);
 
     /// <summary>
     /// Validates and decodes jwt token provided (for testing purposes).
@@ -20,28 +20,37 @@ public interface IJwtService
 
 public class JwtService : IJwtService
 {
-    private const string SecretKey = "988eb86199ea4588b7c4a70ba0633ce5";
-    private const string Issuer = "MyAuthApp";
-    private const string Audience = "MyAuthAppAudience";
+    private readonly string SecretKey;
+    private readonly string Issuer;
+    private readonly string Audience;
     private readonly SymmetricSecurityKey SecurityKey;
     private readonly SigningCredentials SigningCredential;
     private readonly JwtSecurityTokenHandler TokenHandler;
 
-    public JwtService()
+    public JwtService(IConfiguration configuration)
     {
+        var jwtSettingsSection = configuration.GetSection("JwtSettings");
+        SecretKey = jwtSettingsSection["SecretKey"];
+        Issuer = jwtSettingsSection["Issuer"];
+        Audience = jwtSettingsSection["Audience"];
+        
         SecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretKey));
         SigningCredential = new SigningCredentials(SecurityKey, SecurityAlgorithms.HmacSha256);
         TokenHandler = new JwtSecurityTokenHandler();
     }
 
-    public string Create(string userName, string role)
+    public string Create(string userName, List<string> roles)
     {
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Sub, userName),
-            new Claim("role", role),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),  // Id of the issued token (can be used for revocation)
+            new Claim(JwtRegisteredClaimNames.Sub, userName),   // Token subject (usually unique user identifier)
         };
+
+        foreach (var role in roles)
+        {
+            claims.Append(new Claim("role", role));
+        }
 
         var token = new JwtSecurityToken(
             issuer: Issuer,

@@ -26,7 +26,7 @@ public class HomeController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        return Ok(new { Message = "Hello World!" });
+        return Ok(new { Message = "Hello, Welcome to my API!" });
     }
 
     [HttpGet]
@@ -43,9 +43,9 @@ public class HomeController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GenerateJwtToken(string userName, string role)
+    public IActionResult GenerateJwtToken(string userName, List<string> roles)
     {
-        var token = _jwtService.Create(userName, role);
+        var token = _jwtService.Create(userName, roles);
         return Ok(new { Token = token });
     }
 
