@@ -5,3 +5,9 @@
       context: .
       dockerfile: MyAuthApp/Dockerfile
 
+  mywebapiauthapp:
+    image: mywebapiauthapp
+    build:
+      context: .
+      dockerfile: MyWebApiAuthApp/Dockerfile
+

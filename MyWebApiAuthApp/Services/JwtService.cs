@@ -2,11 +2,23 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
-namespace MyAuthApp.Services;
+namespace MyWebApiAuthApp.Services;
 
-public class JwtService
+public interface IJwtService
+{
+    /// <summary>
+    /// Generates JwtToken based on credentials provided.
+    /// </summary>
+    string Create(string userName, string role);
+
+    /// <summary>
+    /// Validates and decodes jwt token provided (for testing purposes).
+    /// </summary>
+    object Decode(string token);
+}
+
+public class JwtService : IJwtService
 {
     private const string SecretKey = "988eb86199ea4588b7c4a70ba0633ce5";
     private const string Issuer = "MyAuthApp";
@@ -22,13 +34,13 @@ public class JwtService
         TokenHandler = new JwtSecurityTokenHandler();
     }
 
-    public string Create()
+    public string Create(string userName, string role)
     {
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, "user123"),
-            new Claim("role", "admin"),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Sub, userName),
+            new Claim("role", role),
         };
 
         var token = new JwtSecurityToken(
@@ -42,9 +54,8 @@ public class JwtService
         return TokenHandler.WriteToken(token);
     }
 
-    public void Decode(string token)
+    public object Decode(string token)
     {
-        Console.WriteLine($"JwtAccessToken: {token}");
         var validationParameters = new TokenValidationParameters()
         {
             ValidateIssuer = true,
@@ -58,15 +69,22 @@ public class JwtService
         try
         {
             var res = TokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
-            foreach (var claim in res.Claims)
-            {
-                Console.WriteLine($"claim: type: {claim.Type}, value: {claim.Value}");
-            }
-            Console.WriteLine();
+            
+            return new 
+            { 
+                Message = "Success",
+                TokenId = validatedToken.Id,
+                Issuer = validatedToken.Issuer, 
+                SecurityKey = validatedToken.SecurityKey,
+                SigningKey = validatedToken.SigningKey,
+                ValidFrom = validatedToken.ValidFrom,
+                ValidTo = validatedToken.ValidTo,
+                Claims = res.Claims.Select(x => new{ Type = x.Type, Value = x.Value })
+            };
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Error: {e.Message}");  
+            return new { Message = "Failed" };
         }
         
     }

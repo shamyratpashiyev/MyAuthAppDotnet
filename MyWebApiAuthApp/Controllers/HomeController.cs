@@ -1,62 +1,58 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MyAuthApp.Data;
-using MyAuthApp.Models;
+using Microsoft.EntityFrameworkCore;
+using MyWebApiAuthApp.Services;
 
-namespace MyAuthApp.Controllers;
+namespace MyWebApiAuthApp.Controllers;
 
-public class HomeController : Controller
+[ApiController]
+[Route("[controller]/[action]")]
+public class HomeController : ControllerBase
 {
-    private readonly ILogger<HomeController> _logger;
     private readonly UserManager<IdentityUser> _userManager;
-    private readonly SignInManager<IdentityUser> _signInManager;
-    private readonly AppIdentityDbContext _appIdentityDbContext;
     private readonly RoleManager<IdentityRole> _roleManager;
-
+    private readonly IJwtService _jwtService;
+    
     public HomeController(
-        ILogger<HomeController> logger,
         UserManager<IdentityUser> userManager,
-        SignInManager<IdentityUser> signInManager,
-        AppIdentityDbContext appIdentityDbContext,
-        RoleManager<IdentityRole> roleManager)
+        RoleManager<IdentityRole> roleManager,
+        IJwtService jwtService)
     {
-        _logger = logger;
         _userManager = userManager;
-        _signInManager = signInManager;
-        _appIdentityDbContext = appIdentityDbContext;
         _roleManager = roleManager;
+        _jwtService = jwtService;
     }
-
+    
+    [HttpGet]
     public async Task<IActionResult> Index()
     {
+        return Ok(new { Message = "Hello World!" });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> RegisteredUserListGet()
+    {
         await SeedUsersAndRoles();
+        var users = await _userManager.Users.Select(x => new { User = x, Roles = new List<string>()}).ToListAsync();
+        foreach (var user in users)
+        {
+            user.Roles.AddRange(await _userManager.GetRolesAsync(user.User));
+        }
 
-        return View();
+        return Ok(users);
     }
 
-    public IActionResult Privacy()
+    [HttpGet]
+    public IActionResult GenerateJwtToken(string userName, string role)
     {
-        return View();
+        var token = _jwtService.Create(userName, role);
+        return Ok(new { Token = token });
     }
 
-    [Authorize(Roles = "admin")]
-    public IActionResult AdminPage()
+    [HttpGet]
+    public object DecodeToken(string token)
     {
-        return View();
-    }
-
-    [Authorize(Roles = "user")]
-    public IActionResult UserPage()
-    {
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return _jwtService.Decode(token);
     }
     
     private async Task SeedUsersAndRoles()
