@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyAuthApp", "MyAuthApp\MyAuthApp.csproj", "{0A5EF6BB-229D-4600-9117-65F4BD67E3EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMvcAuthApp", "MyMvcAuthApp\MyMvcAuthApp.csproj", "{0A5EF6BB-229D-4600-9117-65F4BD67E3EB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{52C4E423-AF77-476E-8D1E-E0DEDD3845C4}"
 	ProjectSection(SolutionItems) = preProject

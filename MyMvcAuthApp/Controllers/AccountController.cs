@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using MyAuthApp.Data;
-using MyAuthApp.Models;
+using MyMvcAuthApp.Data;
+using MyMvcAuthApp.Models;
 
-namespace MyAuthApp.Controllers;
+namespace MyMvcAuthApp.Controllers;
 
 public class AccountController : Controller
 {

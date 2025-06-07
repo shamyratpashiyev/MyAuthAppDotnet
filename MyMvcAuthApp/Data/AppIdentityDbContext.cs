@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace MyAuthApp.Data;
+namespace MyMvcAuthApp.Data;
 using Microsoft.AspNetCore.Identity;
 
 public class AppIdentityDbContext : IdentityDbContext

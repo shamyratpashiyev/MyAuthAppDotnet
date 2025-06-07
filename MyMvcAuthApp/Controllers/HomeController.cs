@@ -2,10 +2,10 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MyAuthApp.Data;
-using MyAuthApp.Models;
+using MyMvcAuthApp.Data;
+using MyMvcAuthApp.Models;
 
-namespace MyAuthApp.Controllers;
+namespace MyMvcAuthApp.Controllers;
 
 public class HomeController : Controller
 {

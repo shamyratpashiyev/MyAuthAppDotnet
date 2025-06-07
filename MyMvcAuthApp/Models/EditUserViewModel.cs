@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace MyAuthApp.Models;
+namespace MyMvcAuthApp.Models;
 
 public class EditUserViewModel
 {

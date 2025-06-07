@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace MyAuthApp.Models;
+namespace MyMvcAuthApp.Models;
 
 public class UserWithRolesDto : IdentityUser
 {

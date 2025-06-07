@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MyAuthApp.Data;
+using MyMvcAuthApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +10,7 @@ builder.Services.AddRazorPages();
 
 // Configure in-memory database
 builder.Services.AddDbContext<AppIdentityDbContext>(options => 
-    options.UseInMemoryDatabase("MyInMemoryDatabase"));
+    options.UseInMemoryDatabase("MyMvcAuthAppDb"));
 
 builder.Services.AddDefaultIdentity<IdentityUser>()
     .AddRoles<IdentityRole>()
