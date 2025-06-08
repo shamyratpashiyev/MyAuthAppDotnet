@@ -30,7 +30,7 @@ public class JwtService : IJwtService
     public JwtService(IConfiguration configuration)
     {
         var jwtSettingsSection = configuration.GetSection("JwtSettings");
-        SecretKey = jwtSettingsSection["SecretKey"];
+        SecretKey = configuration["Authentication:Schemes:Bearer:SigningKeys:0:Value"]; //Generated using "dotnet user-jwts key --reset" command
         Issuer = jwtSettingsSection["Issuer"];
         Audience = jwtSettingsSection["Audience"];
         
