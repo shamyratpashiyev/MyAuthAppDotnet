@@ -7,10 +7,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddCors(options =>
+{
+   options.AddPolicy("AllowAll", policy =>
+   {
+       policy.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+   }); 
+});
 
-// Configure in-memory database
-builder.Services.AddDbContext<AppIdentityDbContext>(options => 
-    options.UseInMemoryDatabase("MyMvcAuthAppDb"));
+// Use SQLite database
+builder.Services.AddDbContext<AppIdentityDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddDefaultIdentity<IdentityUser>()
     .AddRoles<IdentityRole>()
@@ -18,11 +27,12 @@ builder.Services.AddDefaultIdentity<IdentityUser>()
 
 var app = builder.Build();
 
+app.UseCors("AllowAll");
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

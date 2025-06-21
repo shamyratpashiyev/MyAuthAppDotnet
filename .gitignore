@@ -2,3 +2,7 @@
 /MyAuthApp/bin/
 /MyWebApiAuthApp/bin/
 /MyWebApiAuthApp/obj/
+/MyMvcAuthApp/bin/
+/MyMvcAuthApp/obj/
+/MyMvcAuthAppTest/bin/
+/MyMvcAuthAppTest/obj/
